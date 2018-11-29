@@ -2,6 +2,7 @@ import os
 import six
 import shutil
 import tarfile
+import pyunpack
 import zipfile
 from keras.utils import get_file
 
@@ -47,24 +48,32 @@ class BaseDatasetPreparator(object):
         if archive_format is None:
             return False
         if archive_format == 'auto':
-            archive_format = ['tar', 'zip']
+            archive_format = ['tar', 'zip', 'rar']
         if isinstance(archive_format, six.string_types):
             archive_format = [archive_format]
+
+        is_match_fn = None
+        open_fn = None
 
         for archive_type in archive_format:
             if archive_type == 'tar':
                 open_fn = tarfile.open
                 is_match_fn = tarfile.is_tarfile
+
             if archive_type == 'zip':
                 open_fn = zipfile.ZipFile
                 is_match_fn = zipfile.is_zipfile
+
+            if archive_type == 'rar':
+                archive = pyunpack.Archive(archive_path)
+                archive.extractall('\\'.join(unzip_dir.split('\\')[:-1]))
+                return True
 
             if is_match_fn(archive_path):
                 with open_fn(archive_path) as archive:
                     try:
                         archive.extractall(unzip_dir)
-                    except (tarfile.TarError, RuntimeError,
-                            KeyboardInterrupt):
+                    except (tarfile.TarError, RuntimeError, KeyboardInterrupt):
                         if os.path.exists(unzip_dir):
                             if os.path.isfile(unzip_dir):
                                 os.remove(unzip_dir)
@@ -72,4 +81,5 @@ class BaseDatasetPreparator(object):
                                 shutil.rmtree(unzip_dir)
                         raise
                 return True
+
         return False

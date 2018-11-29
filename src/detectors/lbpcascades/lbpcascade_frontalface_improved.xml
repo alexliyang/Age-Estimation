@@ -44,11 +44,11 @@ Classification Pipeline and Active Learning
 =====================================================================
 by Puttemans Steven, Can Ergun and Toon Goedeme (KU Leuven, EAVISE, Belgium)
 
-This model is the best performing IterativeHardPositives+ frontal face detection model
+This models is the best performing IterativeHardPositives+ frontal face detection models
 used in the research paper presented at VISAPP2017, Porto, Portugal.
 
 RESEARCHERS:
-If you are using the improved face detection model or involved ideas please cite
+If you are using the improved face detection models or involved ideas please cite
 this paper (available at http://eavise.be/publications_lirias.php):
 
 @InProceedings{PuttemansVISAPP2017,
